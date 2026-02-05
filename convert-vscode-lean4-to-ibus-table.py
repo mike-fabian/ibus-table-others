@@ -20,8 +20,13 @@ repository to a ibus-table source file.
 ''')
 
 import json
+from datetime import date
+from string import Template
+from typing import Any
 
-def parse_args() -> any:
+TODAY = date.today().strftime('%Y%m%d')
+
+def parse_args() -> Any:
     import argparse
     parser = argparse.ArgumentParser(description=DOCSTRING)
     parser.add_argument('-i', '--inputfilename',
@@ -34,12 +39,15 @@ def parse_args() -> any:
                         type=str,
                         default='lean.txt',
                         help='output file, default is %(default)s')
+    parser.add_argument('-s', '--serial',
+                        nargs='?',
+                        type=str,
+                        default=TODAY,
+                        help='output file version')
     return parser.parse_args()
 
-HEAD = r'''### File header must not be modified
+HEAD = Template(r'''### File header must not be modified
 ### This file must be encoded into UTF-8.
-### This file comes from vscode-lean4's abbreviation table:
-### <https://github.com/leanprover/vscode-lean4/raw/5a938adc7913fbb4e177391bc2b762a35ab29153/lean4-unicode-input/src/abbreviations.json>
 SCIM_Generic_Table_Phrase_Library_TEXT
 VERSION_1_0
 
@@ -53,7 +61,7 @@ UUID = 3fa17a5a-7423-40fb-931e-1930e30e1657
 ### A unique number indicates the version of this file.
 ### For example the last modified date of this file.
 ### This number must be less than 2^32.
-SERIAL_NUMBER = 20250522
+SERIAL_NUMBER = $SERIAL_NUMBER
 
 ### License
 LICENSE = LGPL-2.1-or-later
@@ -131,31 +139,30 @@ SELECT_KEYS = F1,F2,F3,F4,F5,F6,F7,F8,F9,F10
 END_DEFINITION
 
 ### Begin Table data.
-BEGIN_TABLE
-'''
+''')
 
-TAIL = '''\
-END_TABLE
-'''
 
 def convert_vscode_lean4_to_ibus_table(
         inputfilename: str,
-        outputfilename: str) -> None:
+        outputfilename: str,
+        serial: str) -> None:
     '''
     Read VSCode Lean 4 abbreviations.json and write ibus-table .txt file
     '''
     t = json.load(open(inputfilename))
     with open(outputfilename, 'w') as outputfile:
-        outputfile.write(HEAD)
+        outputfile.write(HEAD.substitute(SERIAL_NUMBER=serial))
+        outputfile.write('BEGIN_TABLE\n')
         for k, v in t.items():
             outputfile.write(f'\\{k}\t{v}\t0\n')
-        outputfile.write(TAIL)
+        outputfile.write('END_TABLE\n')
 
 def main() -> None:
     args = parse_args()
     convert_vscode_lean4_to_ibus_table(
         args.inputfilename,
-        args.outputfilename)
+        args.outputfilename,
+        args.serial)
 
 if __name__ == '__main__':
     main()

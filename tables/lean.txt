@@ -1,7 +1,5 @@
 ### File header must not be modified
 ### This file must be encoded into UTF-8.
-### This file comes from vscode-lean4's abbreviation table:
-### <https://github.com/leanprover/vscode-lean4/raw/5a938adc7913fbb4e177391bc2b762a35ab29153/lean4-unicode-input/src/abbreviations.json>
 SCIM_Generic_Table_Phrase_Library_TEXT
 VERSION_1_0
 
@@ -15,7 +13,7 @@ UUID = 3fa17a5a-7423-40fb-931e-1930e30e1657
 ### A unique number indicates the version of this file.
 ### For example the last modified date of this file.
 ### This number must be less than 2^32.
-SERIAL_NUMBER = 20250522
+SERIAL_NUMBER = 20251217
 
 ### License
 LICENSE = LGPL-2.1-or-later
