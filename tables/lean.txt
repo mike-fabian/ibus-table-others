@@ -1,5 +1,11 @@
 ### File header must not be modified
 ### This file must be encoded into UTF-8.
+### github.com/leanprover/vscode-lean4/blob/master/lean4-unicode-input/src/abbreviations.json
+### converted to this ibus-table source file using the command:
+###     ./convert-vscode-lean4-to-ibus-table.py \
+###         --inputfilename ../vscode-lean4/lean4-unicode-input/src/abbreviations.json \
+###         --outputfilename tables/lean.txt \
+###         --serialnumber 20251217
 SCIM_Generic_Table_Phrase_Library_TEXT
 VERSION_1_0
 

@@ -14,12 +14,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
-(DOCSTRING := '''
+'''
 Converting abbreviations.json from the github.com/leanprover/vscode-lean4
-repository to a ibus-table source file.
-''')
+repository to an ibus-table source file.
+'''
 
-import json
+import json, os
 from datetime import date
 from string import Template
 from typing import Any
@@ -28,7 +28,7 @@ TODAY = date.today().strftime('%Y%m%d')
 
 def parse_args() -> Any:
     import argparse
-    parser = argparse.ArgumentParser(description=DOCSTRING)
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-i', '--inputfilename',
                         nargs='?',
                         type=str,
@@ -39,15 +39,21 @@ def parse_args() -> Any:
                         type=str,
                         default='lean.txt',
                         help='output file, default is %(default)s')
-    parser.add_argument('-s', '--serial',
+    parser.add_argument('-s', '--serialnumber',
                         nargs='?',
                         type=str,
                         default=TODAY,
-                        help='output file version')
+                        help='serial number version, default is today')
     return parser.parse_args()
 
-HEAD = Template(r'''### File header must not be modified
+TEMPLATE = Template(r'''### File header must not be modified
 ### This file must be encoded into UTF-8.
+### github.com/leanprover/vscode-lean4/blob/master/lean4-unicode-input/src/abbreviations.json
+### converted to this ibus-table source file using the command:
+###     ./$command \
+###         --inputfilename $inputfilename \
+###         --outputfilename $outputfilename \
+###         --serialnumber $serialnumber
 SCIM_Generic_Table_Phrase_Library_TEXT
 VERSION_1_0
 
@@ -61,7 +67,7 @@ UUID = 3fa17a5a-7423-40fb-931e-1930e30e1657
 ### A unique number indicates the version of this file.
 ### For example the last modified date of this file.
 ### This number must be less than 2^32.
-SERIAL_NUMBER = $SERIAL_NUMBER
+SERIAL_NUMBER = $serialnumber
 
 ### License
 LICENSE = LGPL-2.1-or-later
@@ -142,27 +148,19 @@ END_DEFINITION
 ''')
 
 
-def convert_vscode_lean4_to_ibus_table(
-        inputfilename: str,
-        outputfilename: str,
-        serial: str) -> None:
+def main() -> None:
     '''
     Read VSCode Lean 4 abbreviations.json and write ibus-table .txt file
     '''
-    t = json.load(open(inputfilename))
-    with open(outputfilename, 'w') as outputfile:
-        outputfile.write(HEAD.substitute(SERIAL_NUMBER=serial))
+    args = parse_args()
+    t = json.load(open(args.inputfilename))
+    with open(args.outputfilename, 'w') as outputfile:
+        subs = dict(vars(args), command=os.path.basename(__file__))
+        outputfile.write(TEMPLATE.substitute(subs))
         outputfile.write('BEGIN_TABLE\n')
         for k, v in t.items():
             outputfile.write(f'\\{k}\t{v}\t0\n')
         outputfile.write('END_TABLE\n')
-
-def main() -> None:
-    args = parse_args()
-    convert_vscode_lean4_to_ibus_table(
-        args.inputfilename,
-        args.outputfilename,
-        args.serial)
 
 if __name__ == '__main__':
     main()
