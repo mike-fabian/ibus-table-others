@@ -1,4 +1,28 @@
-commit e39710641a978c9a44408192196388f8ab04165b
+commit f8ef84605224f2c6fa9c3b32357c1d8b249a8a3c
+Author: Mike FABIAN <mfabian@redhat.com>
+Date:   Mon Feb 16 13:49:07 2026 +0100
+
+    Release 1.3.22
+
+commit c0f8b4f50a82001c196139fd6e123b74ba5c050a
+Author: Castedo Ellerman <castedo@castedo.com>
+Date:   Thu Feb 5 19:34:46 2026 +0000
+
+    include command and args used to gen file
+
+commit f0955fced63d83344422f4a689f89e26e45d291e
+Author: Castedo Ellerman <castedo@castedo.com>
+Date:   Thu Feb 5 18:39:00 2026 +0000
+
+    set SERIAL_NUMBER; minor code clean up
+
+commit 4e738af44a1ecb076f2b0e33f165e0c224987963
+Author: Castedo Ellerman <castedo@castedo.com>
+Date:   Thu Feb 5 07:44:00 2026 -0500
+
+    first draft; output lean.txt looks OK, but untested
+
+commit ecf38b3c38f108d93e9f5ff5962754570e0d89c5
 Author: Mike FABIAN <mfabian@redhat.com>
 Date:   Sat May 24 00:36:04 2025 +0200
 
